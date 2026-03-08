@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GhostChat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-grid"></div>
+
+  <div class="app-shell">
+    <div class="topbar">
+      <div>
+        <div class="eyebrow">Private • Fast • Minimal</div>
+        <h1>GhostChat</h1>
+        <p class="muted hero-copy">Anonymous encrypted messaging, image sharing, and peer-to-peer calls with local-only chat history.</p>
+      </div>
+      <div class="status-pill" id="statusPill">
+        <span class="status-dot"></span>
+        <span id="status">offline</span>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <aside class="sidebar glass-card">
+        <div class="section-head">
+          <h2>Session</h2>
+          <span class="badge">AES‑256‑GCM</span>
+        </div>
+
+        <label>Alias</label>
+        <input id="alias" maxlength="30" placeholder="anonymous fox" />
+
+        <label>Room ID</label>
+        <input id="roomId" placeholder="shared-room-123" />
+
+        <label>Shared Secret</label>
+        <input id="secret" type="password" placeholder="same password on both devices" />
+
+        <div class="row actions-row">
+          <button id="connectBtn" class="btn btn-primary">Connect</button>
+          <button id="disconnectBtn" class="btn btn-secondary">Disconnect</button>
+        </div>
+
+        <div class="toggles glass-subcard">
+          <label><input type="checkbox" id="disconnectAfterSend" /> Disconnect after send</label>
+          <label><input type="checkbox" id="audioOnly" /> Audio only call</label>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-label">Peers</span>
+            <strong id="peerCount">0</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Storage</span>
+            <strong>Local DB</strong>
+          </div>
+        </div>
+
+        <div class="tips small muted glass-subcard">
+          Messages and images are encrypted in the browser and stored locally in IndexedDB. The server relays encrypted payloads only.
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="glass-card media-section">
+          <div class="section-head">
+            <h2>Call</h2>
+            <span class="badge badge-soft">WebRTC</span>
+          </div>
+
+          <div class="media-grid">
+            <div class="video-card">
+              <div class="video-head">
+                <h3>Local</h3>
+                <span class="video-tag">You</span>
+              </div>
+              <video id="localVideo" autoplay muted playsinline></video>
+            </div>
+            <div class="video-card">
+              <div class="video-head">
+                <h3>Remote</h3>
+                <span class="video-tag">Peer</span>
+              </div>
+              <video id="remoteVideo" autoplay playsinline></video>
+            </div>
+          </div>
+
+          <div class="row actions-row compact-top">
+            <button id="startCallBtn" class="btn btn-primary">Start Call</button>
+            <button id="hangupBtn" class="btn btn-danger">Hang Up</button>
+          </div>
+        </section>
+
+        <section class="glass-card composer-section">
+          <div class="section-head">
+            <h2>Compose</h2>
+            <span class="badge badge-soft">Encrypted send</span>
+          </div>
+
+          <div class="composer-grid">
+            <input id="messageInput" placeholder="Write an encrypted message" />
+            <label class="file-label" for="imageInput">
+              <input id="imageInput" type="file" accept="image/*" />
+              <span id="fileLabelText">Attach image</span>
+            </label>
+            <button id="sendBtn" class="btn btn-primary send-btn">Send</button>
+          </div>
+        </section>
+
+        <section class="glass-card messages-section">
+          <div class="messages-head">
+            <div>
+              <h2>Messages</h2>
+              <p class="muted small no-margin">Encrypted conversation for the current room</p>
+            </div>
+            <button id="clearLocalBtn" class="btn btn-secondary btn-inline">Clear local DB</button>
+          </div>
+          <div id="messages" class="messages"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
